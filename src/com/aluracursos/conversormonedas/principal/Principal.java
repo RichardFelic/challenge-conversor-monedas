@@ -12,26 +12,25 @@ public class Principal {
 
         System.out.println("Bienvenido al conversor de monedas.");
 
+        // Bucle principal para mostrar el menú y manejar las opciones del usuario
         while (true) {
-            mostrarMenu();  // Mostrar opciones al usuario
-            String opcion = scanner.nextLine().toUpperCase();  // Leer opción del usuario
+            mostrarMenu();
+            String opcion = scanner.nextLine().toUpperCase();
 
             switch (opcion) {
-                case "1":  // Caso 1: Convertir monedas
+                case "1":  // Opción para realizar la conversión de monedas
                     realizarConversion(validador, scanner);
                     break;
-
-                case "2":  // Caso 2: Salir del programa
+                case "2":  // Opción para salir del programa
                     System.out.println("Saliendo del programa...");
-                    System.exit(0);  // Terminar programa
-
-                default:  // Opción inválida
+                    return;  // Salir del programa
+                default:  // Manejar opción inválida
                     System.out.println("Opción no válida. Por favor, elija una opción válida.");
             }
         }
     }
 
-    // Metodo para mostrar el menu
+    // Metodo para mostrar el menú de opciones
     public static void mostrarMenu() {
         String menu = """
                 ------------------------------------
@@ -45,35 +44,27 @@ public class Principal {
 
     // Metodo para realizar la conversión de monedas
     public static void realizarConversion(Validador validador, Scanner scanner) {
+        // Solicitar y validar moneda base
+        String base = validador.solicitarMoneda(scanner, "Ingrese la moneda base (ISO 4217, ej. USD): ");
+
+        // Solicitar y validar moneda objetivo
+        String objetivo = validador.solicitarMoneda(scanner, "Ingrese la moneda objetivo (ISO 4217, ej. EUR): ");
+
+        // Solicitar y validar cantidad a convertir
+        double cantidad = validador.solicitarCantidad(scanner);
+
         try {
-            // Solicitar y validar moneda base
-            String base = validador.solicitarMoneda(scanner, "Ingrese la moneda base (ISO 4217, ej. USD): ");
-            if (base.equalsIgnoreCase("SALIR")) return;
-
-            // Solicitar y validar moneda objetivo
-            String objetivo = validador.solicitarMoneda(scanner, "Ingrese la moneda objetivo (ISO 4217, ej. EUR): ");
-            if (objetivo.equalsIgnoreCase("SALIR")) return;
-
-            // Solicitar y validar cantidad
-            double cantidad = validador.solicitarCantidad(scanner);
-            if (cantidad == -1) return;
-
-            // Obtener tasa de conversión y realizar la conversión
-            try {
-                double tasaConversion = ApiClient.obtenerTasaConversion(base, objetivo);
-
-                if (tasaConversion == 0.0) {
-                    System.out.println("No se pudo obtener la tasa de conversión entre " + base + " y " + objetivo + ".");
-                } else {
-                    double resultado = cantidad * tasaConversion;
-                    System.out.println("Tasa de conversión " + base + " a " + objetivo + ": " + tasaConversion);
-                    System.out.println("Resultado: " + cantidad + " " + base + " = " + resultado + " " + objetivo);
-                }
-            } catch (Exception e) {
-                System.out.println("Error al obtener la tasa de conversión: " + e.getMessage());
+            // Obtener la tasa de conversión y calcular el resultado
+            double tasaConversion = ApiClient.obtenerTasaConversion(base, objetivo);
+            if (tasaConversion == 0.0) {
+                System.out.println("No se pudo obtener la tasa de conversión entre " + base + " y " + objetivo + ".");
+            } else {
+                double resultado = cantidad * tasaConversion;
+                System.out.println("Tasa de conversión " + base + " a " + objetivo + ": " + tasaConversion);
+                System.out.println("Resultado: " + cantidad + " " + base + " = " + resultado + " " + objetivo);
             }
         } catch (Exception e) {
-            System.out.println("Se produjo un error: " + e.getMessage());
+            System.out.println("Error al obtener la tasa de conversión: " + e.getMessage());
         }
     }
 }
