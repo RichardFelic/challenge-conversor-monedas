@@ -38,7 +38,8 @@ Esta URL obtendría las tasas de conversión desde el USD (dólar estadounidense
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/RichardFelic/challenge-conversor-monedas.git```
+   git clone https://github.com/RichardFelic/challenge-conversor-monedas.git
+   ```
 2. Agregar tu clave de API en la clase ApiClient.
 3. Compilar y ejecutar el proyecto.
 
