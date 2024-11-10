@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ApiClient {
-    private static final String API_KEY = "bf038383ba6aec4726987afb";  // Clave de API para acceso
+    private static final String API_KEY = "API-AQUI";  // Clave de API para acceso
     private static final String BASE_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY + "/latest/";
 
     // Cache para almacenar tasas de conversión
